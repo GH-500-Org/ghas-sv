@@ -1,0 +1,30 @@
+name: Dependency review
+
+# Runs on every pull request against main and fails the check if the PR
+# introduces a dependency with a known vulnerability. This is what students
+# see triggered in "Demo 1 - Bonus" of the README.
+#
+# Docs: https://github.com/actions/dependency-review-action
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Block any PR that introduces a vulnerability of moderate or higher.
+          fail-on-severity: moderate
+          # Post a summary comment on the PR so students can see the finding.
+          comment-summary-in-pr: on-failure
